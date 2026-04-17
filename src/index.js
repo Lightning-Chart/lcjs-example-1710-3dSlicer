@@ -1,15 +1,15 @@
 const lcjs = require('@lightningchart/lcjs')
-const {
-    lightningChart,
-    PointSeriesTypes3D,
-    PointStyle3D,
-    ColorRGBA,
-    SolidFill,
-    SolidLine,
-    IndividualPointFill,
-    htmlTextRenderer,
-    PointShape,
-    emptyLine,
+const { 
+    lightningChart, 
+    Themes, 
+    PointSeriesTypes3D, 
+    PointStyle3D, 
+    ColorRGBA, 
+    SolidFill, 
+    SolidLine, 
+    IndividualPointFill, 
+    PointShape, 
+    emptyLine 
 } = lcjs
 
 let isSettingLineValue = false
@@ -22,6 +22,8 @@ let bounds = null
 let xPoint = 4236
 let yPoint = 2040
 let zPoint = -2251
+const lightGrey = ColorRGBA(220, 220, 220)
+const darkGrey = ColorRGBA(140, 140, 140)
 
 const exampleContainer = document.getElementById('chart') || document.body
 if (exampleContainer === document.body) {
@@ -42,8 +44,20 @@ const chart3D = lc
         legend: {
             visible: false,
         },
-        textRenderer: htmlTextRenderer,
-        theme: Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined,
+        theme: (() => {
+    const t = Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined
+    const smallView = Math.min(window.innerWidth, window.innerHeight) < 500
+    if (!window.__lcjsDebugOverlay) {
+        window.__lcjsDebugOverlay = document.createElement('div')
+        window.__lcjsDebugOverlay.style.cssText = 'position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);color:#fff;padding:4px 8px;z-index:99999;font:12px monospace;pointer-events:none'
+        if (document.body) document.body.appendChild(window.__lcjsDebugOverlay)
+        setInterval(() => {
+            if (!window.__lcjsDebugOverlay.parentNode && document.body) document.body.appendChild(window.__lcjsDebugOverlay)
+            window.__lcjsDebugOverlay.textContent = window.innerWidth + 'x' + window.innerHeight + ' dpr=' + window.devicePixelRatio + ' small=' + (Math.min(window.innerWidth, window.innerHeight) < 500)
+        }, 500)
+    }
+    return t && smallView ? lcjs.scaleTheme(t, 0.5) : t
+})(),
     })
     .setTitle('3D view — select a point to update 2D slices')
     .setTitleMargin(0)
@@ -86,8 +100,7 @@ const chartWD = lc
         legend: {
             visible: false,
         },
-        textRenderer: htmlTextRenderer,
-        theme: Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined,
+        // theme: Themes.darkGold
     })
     .setTitle('Width vs Depth')
     .setUserInteractions(undefined)
@@ -123,8 +136,7 @@ const chartWH = lc
         legend: {
             visible: false,
         },
-        textRenderer: htmlTextRenderer,
-        // theme: Themes.darkGold,
+        // theme: Themes.darkGold
     })
     .setTitle('Width vs Height')
     .setUserInteractions(undefined)
@@ -160,8 +172,7 @@ const chartDH = lc
         legend: {
             visible: false,
         },
-        textRenderer: htmlTextRenderer,
-        // theme: Themes.darkGold,
+        // theme: Themes.darkGold
     })
     .setTitle('Depth vs Height')
     .setUserInteractions(undefined)
@@ -262,7 +273,8 @@ const loadBinaryLidarFile = async (assetName, isColored) => {
             dataPoints[i].color = ColorRGBA(r, gValues[i], bValues[i])
         })
     } else {
-        const buildingGrey = ColorRGBA(220, 220, 220)
+        // Use darker grey color for buildings when using light themes
+        const buildingGrey = chart3D.getTheme().isDark ? lightGrey : darkGrey 
         dataPoints.forEach((point) => {
             point.color = buildingGrey
         })
@@ -280,7 +292,7 @@ const loadBinaryLidarFile = async (assetName, isColored) => {
         case 'buildings.bin':
             series3D
                 .setName('Buildings')
-                .setPointStyle(new PointStyle3D.Pixelated({ size: 1, fillStyle: new SolidFill({ color: ColorRGBA(220, 220, 220) }) }))
+                .setPointStyle(new PointStyle3D.Pixelated({ size: 1, fillStyle: new SolidFill({ color: chart3D.getTheme().isDark ? lightGrey : darkGrey }) }))
             break
         case 'green.bin':
             series3D.setName('Vegetation').setPointStyle(new PointStyle3D.Pixelated({ size: 1, fillStyle: new IndividualPointFill() }))

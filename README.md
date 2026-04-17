@@ -74,14 +74,14 @@ Direct developer email support can be purchased through a [Support Plan][4] or b
 [3]: https://stackoverflow.com/questions/tagged/lightningchart
 [4]: https://lightningchart.com/support-services/
 
-© LightningChart Ltd 2009-2025. All rights reserved.
+© LightningChart Ltd 2009-2026. All rights reserved.
 
 
-[3D chart]: https://lightningchart.com/js-charts/api-documentation/v8.1.0/classes/Chart3D.html
-[3D axis]: https://lightningchart.com/js-charts/api-documentation/v8.1.0/classes/Axis3D.html
-[3D point cloud series]: https://lightningchart.com/js-charts/api-documentation/v8.1.0/classes/PointCloudSeries3D.html
-[3D line series]: https://lightningchart.com/js-charts/api-documentation/v8.1.0/classes/LineSeries3D.html
-[XY chart]: https://lightningchart.com/js-charts/api-documentation/v8.1.0/classes/ChartXY.html
-[Point series]: https://lightningchart.com/js-charts/api-documentation/v8.1.0/classes/PointLineAreaSeries.html
-[Constant lines]: https://lightningchart.com/js-charts/api-documentation/v8.1.0/classes/ConstantLine.html
+[3D chart]: https://lightningchart.com/js-charts/api-documentation/v8.2.0/classes/Chart3D.html
+[3D axis]: https://lightningchart.com/js-charts/api-documentation/v8.2.0/classes/Axis3D.html
+[3D point cloud series]: https://lightningchart.com/js-charts/api-documentation/v8.2.0/classes/PointCloudSeries3D.html
+[3D line series]: https://lightningchart.com/js-charts/api-documentation/v8.2.0/classes/LineSeries3D.html
+[XY chart]: https://lightningchart.com/js-charts/api-documentation/v8.2.0/classes/ChartXY.html
+[Point series]: https://lightningchart.com/js-charts/api-documentation/v8.2.0/classes/PointLineAreaSeries.html
+[Constant lines]: https://lightningchart.com/js-charts/api-documentation/v8.2.0/classes/ConstantLine.html
 
