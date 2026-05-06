@@ -13,6 +13,8 @@ const {
     emptyLine 
 } = lcjs
 
+const lightGrey = ColorRGBA(220, 220, 220)
+const darkGrey = ColorRGBA(140, 140, 140)
 let isSettingLineValue = false
 let allLidarData = []
 let totalPointsCount = 0
@@ -23,8 +25,6 @@ let bounds = null
 let xPoint = 4236
 let yPoint = 2040
 let zPoint = -2251
-const lightGrey = ColorRGBA(220, 220, 220)
-const darkGrey = ColorRGBA(140, 140, 140)
 
 const exampleContainer = document.getElementById('chart') || document.body
 if (exampleContainer === document.body) {
@@ -42,9 +42,7 @@ exampleContainer.append(containerChart2)
 const chart3D = lc
     .Chart3D({
         container: containerChart2,
-        legend: {
-            visible: false,
-        },
+        legend: { visible: false },
         theme: (() => {
     const t = Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined
     return t && window.lcjsSmallView ? lcjs.scaleTheme(t, 0.5) : t
@@ -76,7 +74,6 @@ const yLine = chart3D
     .addLineSeries()
     .setCursorEnabled(false)
     .setStrokeStyle(new SolidLine({ thickness: 4, fillStyle: new SolidFill({ color: ColorRGBA(255, 0, 0) }) }))
-
 const zLine = chart3D
     .addLineSeries()
     .setCursorEnabled(false)
@@ -89,9 +86,7 @@ const chartWD = lc
     .ChartXY({
         container: containerChart1,
         defaultAxisY: { type: 'linear-highPrecision' },
-        legend: {
-            visible: false,
-        },
+        legend: { visible: false },
         theme: (() => {
     const t = Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined
     return t && window.lcjsSmallView ? lcjs.scaleTheme(t, 0.5) : t
@@ -129,9 +124,7 @@ const chartWH = lc
     .ChartXY({
         container: containerChart3,
         defaultAxisY: { type: 'linear-highPrecision' },
-        legend: {
-            visible: false,
-        },
+        legend: { visible: false },
         theme: (() => {
     const t = Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined
     return t && window.lcjsSmallView ? lcjs.scaleTheme(t, 0.5) : t
@@ -169,9 +162,7 @@ const chartDH = lc
     .ChartXY({
         container: containerChart4,
         defaultAxisY: { type: 'linear-highPrecision' },
-        legend: {
-            visible: false,
-        },
+        legend: { visible: false },
         theme: (() => {
     const t = Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined
     return t && window.lcjsSmallView ? lcjs.scaleTheme(t, 0.5) : t
@@ -233,7 +224,7 @@ yAxisDHLine.addEventListener('valuechange', (event) => {
 const loadBinaryLidarFile = async (assetName, isColored) => {
     // Load LiDAR data as custom formatted binary file (contains total number of data points + each point X, Y, Z, R, G, B values)
     const result = await fetch(
-        new URL(document.head.baseURI).origin + new URL(document.head.baseURI).pathname + `examples/assets/1710/${assetName}`,
+        new URL(document.head.baseURI).origin + new URL(document.head.baseURI).pathname + `examples/assets/0910/${assetName}`,
     )
     const blob = await result.blob()
     const arrayBuffer = await blob.arrayBuffer()
@@ -319,7 +310,6 @@ const loadBinaryLidarFile = async (assetName, isColored) => {
 
     for (let i = 0; i < dataPoints.length; i++) {
         const p = dataPoints[i]
-
         if (p.x < bounds.minX) bounds.minX = p.x
         if (p.x > bounds.maxX) bounds.maxX = p.x
         if (p.y < bounds.minY) bounds.minY = p.y
@@ -337,17 +327,14 @@ const loadBinaryLidarFile = async (assetName, isColored) => {
 // Add calculated bounds to chart axis intervals
 const applyAxisIntervalsFromBounds = () => {
     const pad = 0.0
-
     const padRange = (min, max) => {
         const r = max - min || 1
         const p = r * pad
         return { start: min - p, end: max + p }
     }
-
     const ix = padRange(bounds.minX, bounds.maxX)
     const iy = padRange(bounds.minY, bounds.maxY)
     const iz = padRange(bounds.minZ, bounds.maxZ)
-
     xAxisWD.setInterval(ix)
     yAxisWD.setInterval(iz)
     xAxisWH.setInterval(ix)
@@ -360,8 +347,9 @@ Promise.all([loadBinaryLidarFile('buildings.bin', false), loadBinaryLidarFile('g
     .then((results) => {
         results.forEach((r) => {
             const dataPoints = r.dataPoints
-            for (let i = 0; i < dataPoints.length; i++) allLidarData.push(dataPoints[i])
-
+            for (let i = 0; i < dataPoints.length; i++) {
+                allLidarData.push(dataPoints[i])
+            }
             applyAxisIntervalsFromBounds()
             // Set initial location
             update3DCrosshair()
@@ -371,7 +359,6 @@ Promise.all([loadBinaryLidarFile('buildings.bin', false), loadBinaryLidarFile('g
                 xPoint = info.x
                 yPoint = info.y
                 zPoint = info.z
-
                 update3DCrosshair()
                 chartPointClicked()
             })
@@ -389,7 +376,6 @@ const chartPointClicked = () => {
     yAxisWHLine.setValue(yPoint)
     xAxisDHLine.setValue(zPoint)
     yAxisDHLine.setValue(yPoint)
-
     updateCharts('x', xPoint)
     updateCharts('y', yPoint)
     updateCharts('z', zPoint)
@@ -397,7 +383,6 @@ const chartPointClicked = () => {
 
 const updateCharts = (axis, value) => {
     const sliceData = extract2dSlice(axis, value)
-
     switch (axis) {
         case 'x':
             seriesDH.clear()
@@ -421,7 +406,6 @@ const updateCharts = (axis, value) => {
 const extract2dSlice = (sliceAxis, sliceValue) => {
     let chartXAxis
     let chartYAxis
-
     if (sliceAxis === 'x') {
         chartXAxis = 'z'
         chartYAxis = 'y'
@@ -429,7 +413,6 @@ const extract2dSlice = (sliceAxis, sliceValue) => {
         chartXAxis = 'x'
         chartYAxis = 'z'
     } else {
-        // sliceAxis === 'z'
         chartXAxis = 'x'
         chartYAxis = 'y'
     }
@@ -446,7 +429,6 @@ const extract2dSlice = (sliceAxis, sliceValue) => {
             if (slicedData.length >= MAX_POINTS) break
         }
     }
-
     return slicedData
 }
 
