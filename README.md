@@ -21,29 +21,33 @@ The demo can be used as an example or a seed project. Local execution requires t
 
 Example of interactive 3D point-cloud slicing with linked 2D views. Click a point in the 3D Chart or drag slice lines in the 2D Charts to inspect the data from multiple perspectives.
 
-The 3D crosshair is rendered using three *Line Series*, and the draggable slice markers in the 2D charts are created with `axis.addConstantLine()`. 
+The 3D crosshair is rendered using three _Line Series_, and the draggable slice markers in the 2D charts are created with `axis.addConstantLine()`.
 
 When the selection changes (either by clicking in 3D or dragging a 2D line), the slice series are refreshed by clearing the previous points and adding the newly computed slice. Slice line positions are synchronized using `constantLine.setValue()`.
-```js
-  // 2D Series
-  seriesWH.clear()  
-  seriesWH.appendJSON(sliceData)
-  
-  // 3D Series
-  lineSeriesX.clear()
-  lineSeriesX.add([{ x: minX, y: yPoint, z: zPoint }, { x: maxX, y: yPoint, z: zPoint }])
 
-  // Constant line
-  xAxisWHLine.setValue(value)
+```js
+// 2D Series
+seriesWH.clear()
+seriesWH.appendJSON(sliceData)
+
+// 3D Series
+lineSeriesX.clear()
+lineSeriesX.appendJSON([
+    { x: minX, y: yPoint, z: zPoint },
+    { x: maxX, y: yPoint, z: zPoint },
+])
+
+// Constant line
+xAxisWHLine.setValue(value)
 ```
 
-When using real-time or frequently updated charts, defining a maximum sample count is strongly recommended. 
+When using real-time or frequently updated charts, defining a maximum sample count is strongly recommended.
 Preallocating memory in this way is essential for stable performance and helps prevent rendering issues or crashes when large volumes of data are added.
-
 
 LiDAR data source: [Philipp Urech](https://sketchfab.com/3d-models/parque-copan-ddfa8cf8aafa4d619e429d9e653ffe81) - Licensed under Creative Commons Attribute.
 
 The same LiDAR data is also used in this example: [3D LiDAR Park Visualization](https://lightningchart.com/js-charts/interactive-examples/examples/lcjs-example-0910-3dLiDARPark.html).
+
 
 ## API Links
 
@@ -77,11 +81,11 @@ Direct developer email support can be purchased through a [Support Plan][4] or b
 © LightningChart Ltd 2009-2026. All rights reserved.
 
 
-[3D chart]: https://lightningchart.com/js-charts/api-documentation/v8.3.0/classes/Chart3D.html
-[3D axis]: https://lightningchart.com/js-charts/api-documentation/v8.3.0/classes/Axis3D.html
-[3D point cloud series]: https://lightningchart.com/js-charts/api-documentation/v8.3.0/classes/PointCloudSeries3D.html
-[3D line series]: https://lightningchart.com/js-charts/api-documentation/v8.3.0/classes/LineSeries3D.html
-[XY chart]: https://lightningchart.com/js-charts/api-documentation/v8.3.0/classes/ChartXY.html
-[Point series]: https://lightningchart.com/js-charts/api-documentation/v8.3.0/classes/PointLineAreaSeries.html
-[Constant lines]: https://lightningchart.com/js-charts/api-documentation/v8.3.0/classes/ConstantLine.html
+[3D chart]: https://lightningchart.com/js-charts/api-documentation/v9.0.0/classes/Chart3D.html
+[3D axis]: https://lightningchart.com/js-charts/api-documentation/v9.0.0/classes/Axis3D.html
+[3D point cloud series]: https://lightningchart.com/js-charts/api-documentation/v9.0.0/classes/PointCloudSeries3D.html
+[3D line series]: https://lightningchart.com/js-charts/api-documentation/v9.0.0/classes/LineSeries3D.html
+[XY chart]: https://lightningchart.com/js-charts/api-documentation/v9.0.0/classes/ChartXY.html
+[Point series]: https://lightningchart.com/js-charts/api-documentation/v9.0.0/classes/PointLineAreaSeries.html
+[Constant lines]: https://lightningchart.com/js-charts/api-documentation/v9.0.0/classes/ConstantLine.html
 

@@ -1,16 +1,16 @@
 window.lcjsSmallView = window.devicePixelRatio >= 2
 const lcjs = require('@lightningchart/lcjs')
-const { 
-    lightningChart, 
-    Themes, 
-    PointSeriesTypes3D, 
-    PointStyle3D, 
-    ColorRGBA, 
-    SolidFill, 
-    SolidLine, 
-    IndividualPointFill, 
-    PointShape, 
-    emptyLine 
+const {
+    lightningChart,
+    Themes,
+    PointSeriesTypes3D,
+    PointStyle3D,
+    ColorRGBA,
+    SolidFill,
+    SolidLine,
+    IndividualPointFill,
+    PointShape,
+    emptyLine,
 } = lcjs
 
 const lightGrey = ColorRGBA(220, 220, 220)
@@ -85,7 +85,6 @@ exampleContainer.append(containerChart1)
 const chartWD = lc
     .ChartXY({
         container: containerChart1,
-        defaultAxisY: { type: 'linear-highPrecision' },
         legend: { visible: false },
         theme: (() => {
     const t = Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined
@@ -123,7 +122,6 @@ exampleContainer.append(containerChart3)
 const chartWH = lc
     .ChartXY({
         container: containerChart3,
-        defaultAxisY: { type: 'linear-highPrecision' },
         legend: { visible: false },
         theme: (() => {
     const t = Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined
@@ -161,7 +159,6 @@ exampleContainer.append(containerChart4)
 const chartDH = lc
     .ChartXY({
         container: containerChart4,
-        defaultAxisY: { type: 'linear-highPrecision' },
         legend: { visible: false },
         theme: (() => {
     const t = Themes[new URLSearchParams(window.location.search).get('theme') || 'darkGold'] || undefined
@@ -269,7 +266,7 @@ const loadBinaryLidarFile = async (assetName, isColored) => {
         })
     } else {
         // Use darker grey color for buildings when using light themes
-        const buildingGrey = chart3D.getTheme().isDark ? lightGrey : darkGrey 
+        const buildingGrey = chart3D.getTheme().isDark ? lightGrey : darkGrey
         dataPoints.forEach((point) => {
             point.color = buildingGrey
         })
@@ -279,15 +276,17 @@ const loadBinaryLidarFile = async (assetName, isColored) => {
     const series3D = chart3D
         .addPointSeries({
             type: PointSeriesTypes3D.Pixelated,
-            individualPointColorEnabled: true,
         })
-        .add(dataPoints)
+        .appendJSON(dataPoints)
 
     switch (assetName) {
         case 'buildings.bin':
-            series3D
-                .setName('Buildings')
-                .setPointStyle(new PointStyle3D.Pixelated({ size: 1, fillStyle: new SolidFill({ color: chart3D.getTheme().isDark ? lightGrey : darkGrey }) }))
+            series3D.setName('Buildings').setPointStyle(
+                new PointStyle3D.Pixelated({
+                    size: 1,
+                    fillStyle: new SolidFill({ color: chart3D.getTheme().isDark ? lightGrey : darkGrey }),
+                }),
+            )
             break
         case 'green.bin':
             series3D.setName('Vegetation').setPointStyle(new PointStyle3D.Pixelated({ size: 1, fillStyle: new IndividualPointFill() }))
@@ -481,15 +480,15 @@ const update3DCrosshair = () => {
     xLine.clear()
     yLine.clear()
     zLine.clear()
-    xLine.add([
+    xLine.appendJSON([
         { x: bounds.minX, y: yPoint, z: zPoint },
         { x: bounds.maxX, y: yPoint, z: zPoint },
     ])
-    yLine.add([
+    yLine.appendJSON([
         { x: xPoint, y: bounds.minY, z: zPoint },
         { x: xPoint, y: bounds.maxY, z: zPoint },
     ])
-    zLine.add([
+    zLine.appendJSON([
         { x: xPoint, y: yPoint, z: bounds.minZ },
         { x: xPoint, y: yPoint, z: bounds.maxZ },
     ])
